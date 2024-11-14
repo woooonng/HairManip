@@ -37,6 +37,7 @@ def run(test_opts):
 	net.cuda()
 
 	test_latents = torch.load(opts.latents_test_path)
+	# dataset[0]은 6개, 1번째 [1, 18, 512], 2~6번째의 길이=900
 	dataset = LatentsDatasetInference(latents=test_latents.cpu(),
 										 opts=opts)
 	dataloader = DataLoader(dataset,
@@ -57,6 +58,7 @@ def run(test_opts):
 			global_i += 1
 			continue
 		with torch.no_grad():
+			# hairstyle_text_inputs_list = 900개 -> [[0.]], hairstyle_tensor_list: 900개 -> [1, 3, 1024, 1024]
 			w, hairstyle_text_inputs_list, color_text_inputs_list, selected_description_tuple_list, hairstyle_tensor_list, color_tensor_list = input_batch
 			for i in range(len(selected_description_tuple_list)):
 				hairstyle_text_inputs = hairstyle_text_inputs_list[i]
